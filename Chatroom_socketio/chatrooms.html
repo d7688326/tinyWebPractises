@@ -1,0 +1,122 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>chatroom</title>
+  <script src="http://code.jquery.com/jquery-1.10.2.js"></script>
+  <script src="/socket.io/socket.io.js"></script>
+  <style>
+ h1{
+            text-align: center;
+            background-color: green;
+        }
+    #username,#roomname{
+        font-size: 2em;
+    }
+    button{
+            height: auto;
+            font-size: 1.5em;
+        }
+    h3{
+         text-align: center;
+            background-color:red;
+            font-size: 2em;
+    }
+    li{
+        list-style: none;
+        background-color: #999;
+        font:1.5em Verdana;
+    }
+    #rooms{
+       font-size: 4em;
+        width: 400px;
+        height: auto;
+    }
+   
+           #chatroom{
+            font:1.5em  Verdana,sans-serif;  
+            border:1px solid#3351ce;
+            height: 300px;
+            overflow-y: auto;
+        }
+        #content_box{
+            height: auto;
+            font: 1.5em Verdana,sans-serif;
+        }
+        #roomtitle{
+            text-align: center;
+            background-color: grey;
+        }
+        p{
+            font-size: 0.9em;
+        }
+  </style>
+</head>
+<body>
+ <h1 >Welcome!!</h1>
+
+  <h2>Wanna create a chatroom?</h2>
+    <input type="text" id="roomname" value="basketball"/>
+    <button id="roomset">CREATE A CHANNEL</button>
+  <h3>Choose a channel and choose a name, you are good to go!</h3>
+ Go to<select  id="rooms">
+			<option value="default">default</option>
+			<option value="test">test</option>
+		</select>
+    with name of<input type="text" id="username" value="Jimmy"/>
+    <button  id="nameset">GO!</button>
+    <body>
+    <h1 id="roomtitle">Welcome </h1><br>
+    <div id="chatroom">
+        <p id="welcome"></p>
+    </div>
+    <input type="text" id="content_box" value="hey all~"/>
+    <button  id="send" >send</button>
+</body>
+</html>
+<script>
+
+$(document).ready(function(){
+    var username=""; 
+    var room="";  
+    var message="";
+    var socket = io.connect('http://localhost:52123');	
+    socket.on('hello',function(data){
+        console.log(data);
+    });
+    $("#roomset").click(function(){
+        var newroom=$("#roomname").val();
+        $("#rooms").append('<option value="'+newroom+'">'+newroom+'</option>');
+        socket.emit('addroom',{newroomname:newroom});
+        alert("Created!! Check other ones' list!");
+    });
+     $("#nameset").click(function(){
+        username=$("#username").val();
+        room=$( "#rooms option:selected" ).text();
+        $("h1").text("WELCOME  "+username);
+    }); 
+    
+    $("#send").click(function(){
+        message=$("#content_box").val();
+        socket.emit("sendmessage",{chatroom:room,usrname:username,content:message});
+        $('#welcome').append('<p>'+username+' : '+message+'</p>');
+    });
+    
+    socket.on('showmessage',function(data){
+       if(data.chatroom==room){
+       $('#welcome').append('<p>'+data.usrname+' : '+data.content+'(From Channel: '+data.chatroom+')</p>');
+       }
+    });
+    
+    socket.on('updateroom',function(data){
+            console.log(data);
+            $("#rooms").append('<option value="'+data.newroomname+'">'+data.newroomname+'</option>');
+        });
+
+
+});
+
+</script>
+ 
+</body>
+</html>

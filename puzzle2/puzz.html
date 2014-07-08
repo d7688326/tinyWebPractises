@@ -1,0 +1,81 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>puzzle</title>
+  <script src="http://code.jquery.com/jquery-1.10.2.min.js" ></script>
+  <script src="http://code.jquery.com/ui/1.10.4/jquery-ui.js"></script>
+  <script>
+  $(document).ready(function(){
+  	$('.drag').draggable({cursor:'pointer',containment:'document',opacity:'0.6',revert:'invalid',revertDuration:500,snap:true,snapTolerance: 50});
+  	$( ".drop" ).droppable({
+      drop: function(event, ui) {
+        $('#message').html( "Dropped!" ),
+        $('.drop').css("background-color","#ff7f00");
+      },hoverClass:'yes',tolerance:'touch',
+      over:function(){
+      	$('.drop').css("background-color","#00ffff"),
+        $('#message').html('drop it dude!');
+
+    },out:function(){
+        $('#message').html('dont go away!!'),
+        $('.drop').css("background-color","red");
+    },tolerance:'fit'
+    });
+  });
+
+  </script>
+ </head>
+ <style type="text/css">
+ 	.success{
+ 		background-color: #ff0000;
+ 	}
+ 	.yes{
+ 		background-color: #ffff00;
+ 		border: 1px solid #000;
+ 	}
+	.drag{
+		display: inline;
+		width: 50px;
+		margin: 10px;
+	}
+	ul{
+		width: 700px;
+		float: left;
+		border: 1px solid #000;
+	}
+	.drop{
+		width: 700px;
+		height: 800px;
+		margin: 40px;
+		float: right;
+		border: 1px solid #000;
+	}
+	#message{
+		font-family: verdana;
+		font:italic bold 2em arial,sans-serif;
+	}
+ </style>
+<body>
+<ul >
+	<li class="drag"><img src="pictures/0.png"></li>
+ 	<li class="drag"><img src="pictures/14.png"></li>
+ 	<li class="drag"><img src="pictures/9.png"></li>
+ 	<li class="drag"><img src="pictures/8.png"></li>
+ 	<li class="drag"><img src="pictures/6.png"></li>
+ 	<li class="drag"><img src="pictures/7.png"></li>
+ 	<li class="drag"><img src="pictures/5.png"></li>
+ 	<li class="drag"><img src="pictures/3.png"></li>
+ 	<li class="drag"><img src="pictures/4.png"></li>
+ 	<li class="drag"><img src="pictures/13.png"></li>
+ 	<li class="drag"><img src="pictures/12.png"></li>
+ 	<li class="drag"><img src="pictures/11.png"></li>
+ 	<li class="drag"><img src="pictures/10.png"></li>
+ 	<li class="drag"><img src="pictures/1.png"></li>
+ 	<li class="drag"><img src="pictures/2.png"></li>
+ </ul>
+
+ <div class="drop"></div>
+ <div id="message">Drag to the right box</div>
+</body>
+</html>

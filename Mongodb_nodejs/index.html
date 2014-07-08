@@ -1,0 +1,48 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<script src="http://code.jquery.com/jquery-1.10.2.min.js" ></script>
+	<title>button for mongo</title>
+	<style>
+		button{
+			font-family: Verdana;
+			font-size: 2em;
+			margin-left: 400px;
+		}
+	</style>	
+</head>
+<body>
+	<button type="button">Click to generate database !!!</button>
+	<ul>show here:<br></ul>
+	<script>
+		$(document).ready(function(){
+			$("button").click(function(){
+				$.ajax({
+					url: '/mongo',
+					type:'GET',
+					dataType:"json",
+					success:function(data){
+						 // console.log(data)
+						if(data.error==null){
+							var html = ""
+							for (var i = 0; i < data.results.length; i++) {
+								var row = data.results[i]
+								html += '<p>x: ' + row.x + ', ' + 'y: ' + row.y +'</p>'
+							}
+							$('ul').html(html)
+						}
+						else{
+							console.error("Error in mongodb");
+						}
+					},
+					error: function(data) {
+						console.error("Ajax error!");
+				}
+
+				});
+			});
+		});
+	</script>
+</body>
+</html>
